@@ -1,0 +1,26 @@
+#
+# MZ configuration
+#
+
+config MEMORY_ZEROISATION
+	bool "Support memory zeroisation"
+	default n
+	help
+      Support memory zeroisation feature which does zeroing of free pages.
+      The purpose of this is to zeroise specific memory
+      when target process exit.
+
+config MZ_PAGE_V2
+	bool "Page functions version"
+	default n
+	help
+      MZ page management code have dependency on kernel.
+      This version need to be change when kernel page code is changed.
+
+config MZ_USE_QSEECOM
+	tristate "MZ Crypto TEE Driver"
+	help
+	  Enable MZ crypto Trusted Execution Environment support
+	  MZ use crypto function and it will be works in tee
+	  if it's supported
+	  This driver is interface for MZ NWd and MZ ta

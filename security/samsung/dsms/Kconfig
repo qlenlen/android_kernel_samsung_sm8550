@@ -1,0 +1,7 @@
+config SECURITY_DSMS
+	bool "DSMS Support"
+	depends on SECURITY
+	default n
+	help
+	  This selects the DSMS support.
+	  If you are unsure how to answer this question, answer N.

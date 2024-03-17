@@ -1,0 +1,16 @@
+config ${caps_test_prefix}_FOR_ON_DEVICE
+	tristate "KUnit test for ${test_prefix}"
+	depends on KUNIT
+	depends on <write CONFIG for building target driver, ${file_name}>
+	help
+	  TODO: Describe config fully.
+	  If you run this test driver on device, SHOULD set this config as 'm' to build test driver modulraly.
+
+config ${caps_test_prefix}_FOR_ONLY_UML
+	tristate "KUnit test for ${test_prefix}"
+	depends on KUNIT
+	depends on UML
+	depends on <write CONFIG for building target driver, ${file_name}>
+	help
+	  TODO: Describe config fully.
+	  This CONFIG is recommended to set to y.

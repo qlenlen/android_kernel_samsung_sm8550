@@ -1,0 +1,10 @@
+menu "SEC Memory Management Options"
+
+config SEC_MM
+	tristate "Enable SEC MM"
+	depends on DMA_SHARED_BUFFER
+	default y
+	help
+	  SEC memory management module
+
+endmenu

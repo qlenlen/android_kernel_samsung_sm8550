@@ -1,0 +1,108 @@
+# Task Integrity Verifier
+
+config FIVE
+	bool "File Based Task Integrity Verifier (FIVE)(based on IMA)"
+	depends on INTEGRITY && DM_VERITY && BLK_DEV_LOOP
+	select CRYPTO
+	select CRYPTO_SHA1
+	select CRYPTO_SHA1_ARM64_CE if ARM64_CRYPTO && KERNEL_MODE_NEON
+	select CRYPTO_HASH_INFO
+	select INTEGRITY_SIGNATURE
+	select INTEGRITY_ASYMMETRIC_KEYS
+	default n
+	help
+	  File Based Task Integrity Verifier (FIVE) maintains
+	  signatures of executables and other sensitive system files,
+	  as they are read or executed. If an attacker manages
+	  to change the contents of an important system file
+	  being measured, we can tell.
+
+config FIVE_GKI_10
+	bool "GKI 1.0 compatible version of FIVE"
+	depends on FIVE
+	default n
+	help
+	 Build GKI 1.0 compatible version of FIVE
+
+config FIVE_GKI_20
+	bool "GKI 2.0 compatible version of FIVE"
+	depends on FIVE
+	default n
+	help
+	 Build GKI 2.0 compatible version of FIVE
+
+config FIVE_DEBUG
+	bool "FIVE Debug mode"
+	depends on FIVE
+	default n
+	help
+	 Enable the debug mode in the FIVE
+
+config FIVE_CERT_ENG
+    string "FIVE certificate to verify signatures for eng binary"
+    depends on FIVE_DEBUG
+    default "x509_five_eng.der"
+    help
+      Path to CERT which will be built-in to eng binary
+
+config FIVE_CERT_USER
+    string "FIVE certificate to verify signatures for user binary"
+    depends on FIVE
+    default "x509_five_user.der"
+    help
+      Path to CERT which will be built-in to user binary
+
+choice
+	prompt "Default integrity hash algorithm"
+	depends on FIVE
+	default FIVE_DEFAULT_HASH_SHA1
+	help
+	   Select the default hash algorithm used for the measurement
+	   list, integrity appraisal and audit log.
+
+	config FIVE_DEFAULT_HASH_SHA1
+		bool "SHA1 (default)"
+		depends on CRYPTO_SHA1
+
+	config FIVE_DEFAULT_HASH_SHA256
+		bool "SHA256"
+		depends on CRYPTO_SHA256
+
+	config FIVE_DEFAULT_HASH_SHA512
+		bool "SHA512"
+		depends on CRYPTO_SHA512
+
+	config FIVE_DEFAULT_HASH_WP512
+		bool "WP512"
+		depends on CRYPTO_WP512
+endchoice
+
+config FIVE_DEFAULT_HASH
+	string
+	depends on FIVE
+	default "sha1" if FIVE_DEFAULT_HASH_SHA1
+	default "sha256" if FIVE_DEFAULT_HASH_SHA256
+	default "sha512" if FIVE_DEFAULT_HASH_SHA512
+	default "wp512" if FIVE_DEFAULT_HASH_WP512
+
+config FIVE_TRUSTED_KEYRING
+	bool "Require all keys on the .five keyring be signed"
+	depends on FIVE && SYSTEM_TRUSTED_KEYRING
+	default y
+	help
+	   This option requires that all keys added to the .five
+	   keyring be signed by a key on the system trusted keyring.
+
+config FIVE_PA_FEATURE
+	bool "Process authenticator"
+	depends on FIVE && !PROCA
+	default y
+	help
+	   Enable Process Authenticator related code
+
+config FIVE_AUDIT_VERBOSE
+	bool "FIVE verbose audit logs"
+	depends on FIVE_DEBUG
+	default n
+	help
+	   Enable verbose audit logs.

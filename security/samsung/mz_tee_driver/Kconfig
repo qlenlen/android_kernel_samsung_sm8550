@@ -1,0 +1,48 @@
+#
+# TEE Driver configuration
+#
+
+config MZ_TEE_DRIVER
+    tristate "Crypto TEE Driver"
+    depends on MEMORY_ZEROISATION
+    default y
+    help
+      Enable MZ crypto Trusted Execution Environment support
+      MZ use crypto function and it will be works in tee
+      if it's supported
+      This driver is interface for MZ NWd and MZ ta
+
+choice
+    prompt "MZ Secure OS"
+    depends on MZ_TEE_DRIVER
+    default MZ_USE_QSEECOM if QSEECOM
+    default MZ_USE_TZDEV if TZDEV
+    default MZ_USE_TRUSTONIC if TRUSTONIC_TEE
+    default MZ_DEFAULT
+    help
+      Select Secure OS for MZ
+
+    config MZ_USE_TRUSTONIC
+        bool "MZ based on Trustonic Secure OS"
+        depends on TRUSTONIC_TEE
+        help
+          Use Trustonic as base Trusted Execution Environment
+
+    config MZ_USE_TZDEV
+        bool "MZ based on TEEgris Secure OS"
+        depends on TZDEV
+        help
+          Use TEEgris as base Trusted Execution Environment
+
+    config MZ_USE_QSEECOM
+        bool "MZ based on Qualcomm Secure OS"
+        depends on QSEECOM
+        help
+          Use Qualcomm as base Trusted Execution Environment
+
+    config MZ_DEFAULT
+        bool "MZ Disabled"
+        help
+          MZ disabled
+endchoice
+

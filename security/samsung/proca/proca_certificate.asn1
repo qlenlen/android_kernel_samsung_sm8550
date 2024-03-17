@@ -1,0 +1,13 @@
+PaCertificate ::= SEQUENCE {
+  paData             PaData,
+  signature          OCTET STRING
+}
+
+PaData ::= SEQUENCE {
+  paVersion              INTEGER,
+  paFlags                INTEGER ({ proca_certificate_get_flags }),
+  paKeyId                INTEGER,
+  paId                   OCTET STRING,
+  paAppName              OCTET STRING ({ proca_certificate_get_app_name }),
+  fiveSignatureHash      OCTET STRING ({ proca_certificate_get_five_signature_hash })
+}

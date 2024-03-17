@@ -1,0 +1,7 @@
+config SECURITY_KUMIHO
+	bool "Kumiho Support"
+	depends on SECURITY
+	default n
+	help
+	  This selects Kumiho support.
+	  If you are unsure how to answer this question, answer N.

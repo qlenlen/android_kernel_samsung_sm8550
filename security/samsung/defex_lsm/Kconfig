@@ -1,0 +1,31 @@
+config SECURITY_DEFEX
+	bool "Defex Support"
+	depends on SECURITY && (!KCOV || SAMSUNG_PRODUCT_SHIP)
+	select CRYPTO
+	select CRYPTO_RSA
+	select CRYPTO_SHA1
+	select CRYPTO_SHA256
+	select CRYPTO_HASH_INFO
+	select INTEGRITY_SIGNATURE
+	select INTEGRITY_ASYMMETRIC_KEYS
+	default n
+	help
+	  This selects the Defex support.
+	  If you are unsure how to answer this question, answer N.
+
+config DEFEX_KERNEL_ONLY
+	bool "Defex Kernel Only"
+	depends on SECURITY_DEFEX
+	default n
+	help
+	  This lets defex know whether kernel-only build or not.
+	  Default value will be set to "y" if the build is kernel-only.
+	  And it will be changed to "n" by build.py at platform-build.
+
+config SECURITY_DEFEX_USER
+	bool "Defex USER build"
+	depends on SECURITY_DEFEX
+	default n
+	help
+	  This lets defex to know whether USER build performed or not
+	  in case of TARGET_BUILD_VARIANT variable is empty.

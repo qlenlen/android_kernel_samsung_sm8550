@@ -1,0 +1,48 @@
+# SPDX-License-Identifier: GPL-2.0
+menu "Android"
+
+if ANDROID
+
+config SAMSUNG_BINDER_MONITOR
+	bool "monitor binder transaction"
+	default n
+	help
+	  monitor binder transaction and resitrict it.
+
+config ASHMEM
+	bool "Enable the Anonymous Shared Memory Subsystem"
+	depends on SHMEM
+	help
+	  The ashmem subsystem is a new shared memory allocator, similar to
+	  POSIX SHM but with different behavior and sporting a simpler
+	  file-based API.
+
+	  It is, in theory, a good memory allocator for low-memory devices,
+	  because it can discard shared memory units when under memory pressure.
+
+config DEBUG_KINFO
+	bool "Debug Kernel Information Support"
+	depends on KALLSYMS
+	help
+	  This supports kernel information backup for bootloader usage.
+	  Specifics:
+	   - The kallsyms symbols for unwind_backtrace
+	   - Page directory pointer
+	   - UTS_RELEASE
+	   - BUILD_INFO(ro.build.fingerprint)
+
+config SAMSUNG_LMKD_DEBUG
+	bool "record lmkd kill history"
+	default y
+	help
+	  record lmkd kill history
+
+config SAMSUNG_FREECESS
+	bool "thraw frozen process when recv sig"
+	default n
+	help
+	  thraw frozen process when recv sig.
+
+endif # if ANDROID
+
+endmenu
