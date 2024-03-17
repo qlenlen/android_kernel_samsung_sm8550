@@ -1604,9 +1604,11 @@ early_exit:
 	if (next_run)
 		gc_work->early_drop = false;
 	// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA {
+	#ifdef CONFIG_KNOX_NCM
 	if ( (check_ncm_flag()) && (check_intermediate_flag()) ) {
 		next_run = 0;
 	}
+	#endif
 	// SEC_PRODUCT_FEATURE_KNOX_SUPPORT_NPA }
 
 	queue_delayed_work(system_power_efficient_wq, &gc_work->dwork, next_run);
