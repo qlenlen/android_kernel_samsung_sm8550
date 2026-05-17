@@ -1,0 +1,5 @@
+config HOOK_TEMP
+    tristate "Hook Temperature Module"
+    default n
+    help
+      This is a kernel module to hook and modify temperature readings.

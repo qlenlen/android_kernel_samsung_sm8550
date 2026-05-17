@@ -1,0 +1,61 @@
+name: Release OneDesign
+
+on:
+  workflow_dispatch:
+
+jobs:
+  download-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download release info
+        run: |
+          curl -H "Authorization: token ${{ secrets.TOKEN }}" \
+               https://api.github.com/repos/qlenlen/OneDesign/releases/latest \
+               -o release_info.json
+          cat release_info.json
+          mkdir assets
+
+      - name: Download all assets
+        run: |
+          ASSET_INFO=$(jq -r '.assets[] | "\(.id) \(.name)"' release_info.json)
+          while IFS= read -r line; do
+            ASSET_ID=$(echo $line | awk '{print $1}')
+            echo $ASSET_ID
+            ASSET_NAME=$(echo $line | awk '{print $2}')
+            echo $ASSET_NAME
+
+            curl -L -H "Authorization: token ${{ secrets.TOKEN }}" \
+              -H "Accept: application/octet-stream" \
+              "https://api.github.com/repos/qlenlen/OneDesign/releases/assets/$ASSET_ID" \
+              -o $ASSET_NAME
+          done <<<"$ASSET_INFO"
+          mv *.apk assets
+
+      - name: Upload assets
+        uses: actions/upload-artifact@v4.3.5
+        with:
+          name: kernel_samsung_dm3q
+          path: assets
+
+      - name: Generate TAG
+        run: |
+          DATE=$(date +'%y.%m.%d')
+          echo "TAG=$DATE" >> $GITHUB_ENV
+
+      - name: Upload release
+        uses: ncipollo/release-action@v1.14.0
+        with:
+          artifacts: "assets/*.apk"
+          allowUpdates: true
+          name: "OneDesign"
+          tag: "CI_${{ env.TAG }}"
+          body: |
+            ### Note:
+            use OneDesign with [LSPosed](https://github.com/LSPosed/LSPosed/releases)
+
+            ### CHANGELOG
+
+            ### 更新日志

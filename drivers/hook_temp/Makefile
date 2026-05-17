@@ -1,0 +1,1 @@
+obj-$(CONFIG_HOOK_TEMP)	+= hook_temp.o
